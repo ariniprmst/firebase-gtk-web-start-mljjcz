@@ -109,6 +109,28 @@ async function main() {
       unsubscribeGuestbook();
     }
   });
+// Listen to the current Auth state
+onAuthStateChanged(auth, user => {
+  if (user) {
+    startRsvpButton.textContent = 'LOGOUT';
+    // Show guestbook to logged-in users
+    guestbookContainer.style.display = 'block';
+
+    // Subscribe to the guestbook collection
+    subscribeGuestbook();
+    // Subcribe to the user's RSVP
+    subscribeCurrentRSVP(user);
+  } else {
+    startRsvpButton.textContent = 'RSVP';
+    // Hide guestbook for non-logged-in users
+    guestbookContainer.style.display = 'none'
+    ;
+    // Unsubscribe from the guestbook collection
+    unsubscribeGuestbook();
+    // Unsubscribe from the guestbook collection
+    unsubscribeCurrentRSVP();
+  }
+});
 
   // Listen to guestbook updates
   function subscribeGuestbook() {
